@@ -9,7 +9,7 @@ module ActsAsFlyingSaucer
     @@options = {
       :java_bin => "java",
       :classpath_separator => ':',
-      :tmp_path => "/tmp",
+      :tmp_path => Dir.tmpdir,
       :run_mode => :once
     }
     

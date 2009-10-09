@@ -10,23 +10,23 @@ module ActsAsFlyingSaucer
     #
     def self.write_pdf(options)
      
-      File.open(options[:input_file], 'w') do |file|
-        file << options[:html]
-      end
-
       if defined?(JRUBY_VERSION)
-        input = options[:input_file]
+        html = options[:html]
         output = options[:output_file]
-        url = java.io.File.new(input).toURI.toURL.toString
 
         os = java.io.FileOutputStream.new(output)
 
         renderer = org.xhtmlrenderer.pdf.ITextRenderer.new
-        renderer.setDocument(url)
+        renderer.setDocumentFromString(html)
         renderer.layout
         renderer.createPDF(os)
+
         os.close
       else
+        File.open(options[:input_file], 'w') do |file|
+          file << options[:html]
+        end
+
         java_dir = File.join(File.expand_path(File.dirname(__FILE__)), "java")
 
         class_path = ".:#{java_dir}/bin"
